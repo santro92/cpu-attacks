@@ -1,0 +1,7 @@
+S ->  (aA)_1 | (bB)_1    
+A -> (aCb)_2 |  a
+C ->  (aB)_2 | (A)_3 | c
+B ->  (cA)_3 | (C)_3 | b
+start S
+cost a 1, b 2, c 3
+replace a "1", b "01", c "11"

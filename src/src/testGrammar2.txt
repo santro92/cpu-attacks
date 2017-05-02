@@ -1,0 +1,84 @@
+S ->  (aA)_1 | (bB)_1    
+A -> (aCb)_2 |  a
+C ->  (aB)_2 | (A)_3 | c
+B ->  (cA)_3 | (C)_3 | b
+cost a 1, b 2, c 3
+start S
+replace a "1", b "01", c "11"
+
+Encoded as ILP:
+   max   w(a)*(f1+f3+f4+f5) // f1 + 2*f2 + 3*f3 + f4 + f5  
+       + w(b)*(f2+f3+f10)   //    + 3*f7 + 3*f8 + 2*f10
+       + w(c)*(f7+f8)       // [1.0,2.0,3.0,1.0,1.0,0.0,3.0,3.0,0.0,2.0]
+
+*   // in(T) = out(T)
+
+constraint 0:              f1 + f2     = 1 // in(S) = out(S)
+constraint 1:  f1 + f6 + f8 - f3 - f4  = 0 // in(A) = out(A)
+constraint 2: -f3 - f9 + f5 + f6 + f7  = 0 // in(C) = out(C)
+constraint 3: -f2 - f5 + f8 + f9 + f10 = 0 // in(B) = out(B)
+
+Gives us an optimal solution of 20 (max cost for string)
+with 
+f: [0, 1, 2, 1, 2, 0, 0, 3, 0, 0]
+
+This gives us the following derivation:
+
+S -> bB -> bcA -> 
+         bcaCb -> 
+        bcaaBb -> 
+       bcaacAb -> 
+     bcaacaCbb ->
+    bcaacaaBbb -> 
+   bcaacaacAbb ->
+   bcaacaacabb 
+
+with corresponding cost
+   23113113122 = 20
+
+
+
+
+
+//TODO: 
+// start S
+// default upper bound on unconstrained production rules with nonterminals in RHS
+// replace macro for final string:
+//   macro a "public class", b "{\n", c  
+// billion lols attack example
+
+// S -> (SS)_5 | s
+
+// S1 -> (S2 S2)_
+// S2 -> S3 S3
+..
+// S10 -> s
+
+
+
+
+
+
+// Example 2:
+S -> (AS)_2 | (AB)_2
+A -> (aB)_4
+B -> b
+start S
+cost a 1, b 1
+
+// Example 3:
+S ->  (AB)_3 | (BA)_2 | (SS)_1
+A -> (a)_2
+B -> (b)_2
+start S
+cost a 1, b 1
+
+// Example Billion LOLs:
+S ->  (A)_11 | (SS)_10
+A ->  (BB)_100
+B ->  (CC)_100
+C ->  (DD)_100
+D ->  (EE)_100
+E -> e
+start S
+cost e 1

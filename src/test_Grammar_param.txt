@@ -1,0 +1,7 @@
+S -> (SA)_{} | a  
+A -> (AB)_{} | b
+B -> (BC)_{} | c
+C -> C_{} | d
+start S
+cost a 1, b 1, c 1
+replace a "", b "", c "", d "lol"
